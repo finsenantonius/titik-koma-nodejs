@@ -1,9 +1,7 @@
 {
+  "name": "titikkomaprog",
   "version": 2,
-  "routes": [
-      {
-          "src": "/(.*)",
-          "dest": "/"
-      }
-  ]
+  "env": {
+    "MONGODB_URI": "@my-mongodb-uri"
+  }
 }
