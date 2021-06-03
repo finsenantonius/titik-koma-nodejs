@@ -7,7 +7,6 @@ const postRoute = require("../routes/post");
 const { json } = require("express");
 
 router.post("/register", async (req, res) => {
-  //validate data -> udah pindah ke validation.js
   // const {error} = schema.validate(req.body);
   // res.send(error.details[0].message);
   const { error } = registerValidation(req.body);
