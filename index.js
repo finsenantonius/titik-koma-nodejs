@@ -24,4 +24,5 @@ app.get("/", (req, res) => res.send("Hai"));
 app.use("/api/user/", authRoute);
 app.use("/api/post/", postRoute);
 
-app.listen(3000, () => console.log("Server up and running"));
+const port = process.env.port || 3000;
+app.listen(port);
