@@ -6,6 +6,7 @@ const helmet = require("helmet");
 //import route
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/post");
+const courseRoute = require("./routes/course");
 
 app.use(helmet());
 dotenv.config();
@@ -22,6 +23,7 @@ app.use(express.json());
 app.get("/", (req, res) => res.send("Hai"));
 app.use("/api/user/", authRoute);
 app.use("/api/post/", postRoute);
+app.use("/api/course/", courseRoute);
 
 const port = process.env.PORT || 3000;
 app.listen(port);
