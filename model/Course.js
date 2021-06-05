@@ -5,6 +5,10 @@ const courseSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  courseTitle: {
+    type: String,
+    required: true,
+  },
   courseDescription: {
     type: String,
     required: true,
@@ -14,6 +18,22 @@ const courseSchema = new mongoose.Schema({
     required: true,
   },
   courseFile: {
+    type: String,
+    required: true,
+  },
+  courseLanguage: {
+    type: String,
+    required: true,
+  },
+  courseLevel: {
+    type: String,
+    required: true,
+  },
+  courseCreated: {
+    type: String,
+    required: true,
+  },
+  courseAuthor: {
     type: String,
     required: true,
   },

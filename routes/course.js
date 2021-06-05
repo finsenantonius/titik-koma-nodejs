@@ -4,9 +4,14 @@ const Course = require("../model/Course");
 router.post("/addCourse", async (req, res) => {
   const add = new Course({
     courseName: req.body.courseName,
+    courseTitle: req.body.courseTitle,
     courseDescription: req.body.courseDescription,
     courseThumbnail: req.body.courseThumbnail,
     courseFile: req.body.courseFile,
+    courseLanguage: req.body.courseLanguage,
+    courseLevel: req.body.courseLevel,
+    courseCreated: req.body.courseCreated,
+    courseAuthor: req.body.courseAuthor,
   });
   try {
     const addedCourse = await add.save();
@@ -23,9 +28,14 @@ router.patch("/updateCourse", async (req, res) => {
       {
         $set: {
           courseName: req.body.courseName,
+          courseTitle: req.body.courseTitle,
           courseDescription: req.body.courseDescription,
           courseThumbnail: req.body.courseThumbnail,
           courseFile: req.body.courseFile,
+          courseLanguage: req.body.courseLanguage,
+          courseLevel: req.body.courseLevel,
+          courseCreated: req.body.courseCreated,
+          courseAuthor: req.body.courseAuthor,
         },
       }
     );
