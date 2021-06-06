@@ -72,7 +72,7 @@ router.get("/getSpecificCourse/:courseName", async (req, res) => {
       { courseName: req.params.courseName },
       { _id: 0, __v: 0, modulId: 0 }
     );
-    res.send(course[0]);
+    res.send(course);
   } catch {
     res.json({ message: err });
   }
