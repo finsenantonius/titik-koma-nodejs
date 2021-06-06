@@ -37,6 +37,10 @@ const courseSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  modulId: {
+    type: String,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("Course", courseSchema);

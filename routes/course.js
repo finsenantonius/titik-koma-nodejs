@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Course = require("../model/Course");
+const Modul = require("../model/Modul");
 
 router.post("/addCourse", async (req, res) => {
   const add = new Course({
@@ -12,6 +13,7 @@ router.post("/addCourse", async (req, res) => {
     courseLevel: req.body.courseLevel,
     courseCreated: req.body.courseCreated,
     courseAuthor: req.body.courseAuthor,
+    modulId: req.body.modulId,
   });
   try {
     const addedCourse = await add.save();
@@ -36,6 +38,7 @@ router.patch("/updateCourse", async (req, res) => {
           courseLevel: req.body.courseLevel,
           courseCreated: req.body.courseCreated,
           courseAuthor: req.body.courseAuthor,
+          modulId: req.body.modulId,
         },
       }
     );
@@ -48,7 +51,7 @@ router.patch("/updateCourse", async (req, res) => {
 router.delete("/courseDelete", async (req, res) => {
   try {
     const deleted = await Course.remove({ _id: req.body.courseId });
-    res.json(removed);
+    res.json(deleted);
   } catch {
     res.json({ message: err });
   }
@@ -67,7 +70,7 @@ router.get("/getSpecificCourse/:courseName", async (req, res) => {
   try {
     const course = await Course.find(
       { courseName: req.params.courseName },
-      { _id: 0, __v: 0 }
+      { _id: 0, __v: 0, modulId: 0 }
     );
     res.send(course[0]);
   } catch {
@@ -75,4 +78,63 @@ router.get("/getSpecificCourse/:courseName", async (req, res) => {
   }
 });
 
+router.post("/addModul", async (req, res) => {
+  const add = new Modul({
+    modulName: req.body.modulName,
+    modulThumbnail: req.body.modulThumbnail,
+  });
+  try {
+    const addedModul = await add.save();
+    res.json(addedModul);
+  } catch (err) {
+    res.json({ message: err });
+  }
+});
+
+router.patch("/updateModul", async (req, res) => {
+  try {
+    const updated = await Modul.updateOne(
+      { _id: req.body.modulId },
+      {
+        $set: {
+          modulName: req.body.modulName,
+          moduleThumbnail: req.body.modulThumbnail,
+        },
+      }
+    );
+    res.json(updated);
+  } catch {
+    res.json({ message: err });
+  }
+});
+
+router.delete("/modulDelete", async (req, res) => {
+  try {
+    const deleted = await Modul.remove({ _id: req.body.modulId });
+    res.json(deleted);
+  } catch {
+    res.json({ message: err });
+  }
+});
+
+router.get("/getAllModul", async (req, res) => {
+  try {
+    const modul = await Modul.find({}, { _id: 0, __v: 0 });
+    res.json(modul);
+  } catch {
+    res.json({ message: err });
+  }
+});
+
+router.get("/getAllCourseByModul/:modulId", async (req, res) => {
+  try {
+    const course = await Course.find(
+      { modulId: req.params.modulId },
+      { _id: 0, __v: 0, modulId: 0 }
+    );
+    res.send(course);
+  } catch {
+    res.json({ message: err });
+  }
+});
 module.exports = router;
