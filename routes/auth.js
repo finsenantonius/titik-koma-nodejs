@@ -25,6 +25,7 @@ router.post("/register", async (req, res) => {
     password: hashedPassword,
     score: req.body.score,
     avatar: req.body.avatar,
+    isRedeemVoucher: req.body.isRedeemVoucher,
   });
   try {
     const savedUser = await user.save();
@@ -46,7 +47,13 @@ router.post("/login", async (req, res) => {
   if (!validPassword) return res.status(400).send("Password is wrong!");
   //create and assign token
   const token = jwt.sign(
-    { _id: user._id, name: user.name, score: user.score, avatar: user.avatar },
+    {
+      _id: user._id,
+      name: user.name,
+      score: user.score,
+      avatar: user.avatar,
+      isRedeemVoucher: user.isRedeemVoucher,
+    },
     process.env.TOKEN_SECRET
   );
   res.header("auth-token", token).send(token);
@@ -129,10 +136,11 @@ router.patch("/updateScore", async (req, res) => {
   const user = await User.findById(req.body.id);
   if (!user) return res.status(404).send("Tidak ada usernya");
 
+  var datetime = new Date();
   try {
     const updated = await User.updateOne(
       { _id: user._id },
-      { $set: { score: req.body.score } }
+      { $set: { score: req.body.score, updatedScoreDate: datetime } }
     );
     res.status(200).send("Sukses");
   } catch (err) {
@@ -155,6 +163,21 @@ router.patch("/updateAvatar", async (req, res) => {
   }
 });
 
+router.patch("/redeemVoucher", async (req, res) => {
+  const user = await User.findById(req.body.id);
+  if (!user) return res.status(404).send("Tidak ada usernya");
+
+  try {
+    const updated = await User.updateOne(
+      { _id: user._id },
+      { $set: { isRedeemVoucher: req.body.isRedeemVoucher } }
+    );
+    res.status(200).send("Sukses");
+  } catch (err) {
+    res.json({ message: err });
+  }
+});
+
 router.get("/getAllProfile", async (req, res) => {
   try {
     const post = await User.find(
@@ -162,8 +185,7 @@ router.get("/getAllProfile", async (req, res) => {
       { name: 1, score: 1, avatar: 1, _id: 0 }
     ).sort({
       score: -1,
-      name: -1,
-      avatar: -1,
+      updatedScoreDate: 1,
     });
 
     res.json(post.slice(0, 3));

@@ -23,6 +23,13 @@ const userSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  updatedScoreDate: {
+    type: Date,
+  },
+  isRedeemVoucher: {
+    type: Boolean,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);
