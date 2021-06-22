@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
@@ -9,7 +10,7 @@ const postRoute = require("./routes/post");
 const courseRoute = require("./routes/course");
 const feedbackRoute = require("./routes/feedback");
 
-app.use(helmet());
+app.use(cors());
 dotenv.config();
 
 mongoose.connect(
