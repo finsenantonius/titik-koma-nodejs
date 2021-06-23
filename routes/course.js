@@ -59,7 +59,7 @@ router.delete("/courseDelete", async (req, res) => {
 
 router.get("/getAllCourse", async (req, res) => {
   try {
-    const course = await Course.find({}, { _id: 0, __v: 0 });
+    const course = await Course.find({}, { __v: 0 });
     res.json(course);
   } catch {
     res.json({ message: err });
@@ -119,7 +119,7 @@ router.delete("/modulDelete", async (req, res) => {
 
 router.get("/getAllModul", async (req, res) => {
   try {
-    const modul = await Modul.find({}, { _id: 0, __v: 0 });
+    const modul = await Modul.find({}, { __v: 0 });
     res.json(modul);
   } catch {
     res.json({ message: err });
