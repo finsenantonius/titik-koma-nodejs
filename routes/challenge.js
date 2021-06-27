@@ -16,4 +16,13 @@ router.post("/addChallenge", async (req, res) => {
   }
 });
 
+router.get("/getChallenge", async (req, res) => {
+  try {
+    const challenge = await Challenge.find({}, { __v: 0 });
+    res.json(challenge);
+  } catch {
+    res.json({ message: err });
+  }
+});
+
 module.exports = router;
