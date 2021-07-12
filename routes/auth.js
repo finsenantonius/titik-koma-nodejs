@@ -194,4 +194,13 @@ router.get("/getAllProfile", async (req, res) => {
   }
 });
 
+router.get("/getAllData", async (req, res) => {
+  try {
+    const profile = await User.find();
+    res.send(profile);
+  } catch {
+    res.json({ message: err });
+  }
+});
+
 module.exports = router;

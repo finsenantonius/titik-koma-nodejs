@@ -10,6 +10,7 @@ const postRoute = require("./routes/post");
 const courseRoute = require("./routes/course");
 const feedbackRoute = require("./routes/feedback");
 const challengeRoute = require("./routes/challenge");
+const newsRoute = require("./routes/news");
 
 app.use(cors());
 dotenv.config();
@@ -29,6 +30,7 @@ app.use("/api/post/", postRoute);
 app.use("/api/course/", courseRoute);
 app.use("/api/feedback/", feedbackRoute);
 app.use("/api/challenge/", challengeRoute);
+app.use("/api/news/", newsRoute);
 
 const port = process.env.PORT || 3000;
 app.listen(port);
