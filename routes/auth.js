@@ -3,8 +3,20 @@ const User = require("../model/User");
 const { registerValidation, loginValidation } = require("../validation");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
 const postRoute = require("../routes/post");
 const { json } = require("express");
+
+const nodemailer = require("nodemailer");
+dotenv.config();
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "cerdaskanbangsa.id@gmail.com",
+    pass: process.env.PASSWORD,
+  },
+});
 
 router.post("/register", async (req, res) => {
   // const {error} = schema.validate(req.body);
@@ -203,4 +215,43 @@ router.get("/getAllData", async (req, res) => {
   }
 });
 
+router.post("/sendEmail", async (req, res) => {
+  let mailOptions = {
+    from: "Titik Koma",
+    to: req.body.userEmail,
+    subject: "Kode OTP Lupa Password",
+    text: "Kode OTP untuk merubah password adalah " + req.body.otp,
+  };
+
+  const user = await User.findOne({ email: req.body.userEmail });
+  if (!user) return res.status(400).send("Email is not found!");
+
+  try {
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err) throw err;
+      console.log("Email sent: " + info.response);
+    });
+    res.status(200).send("Sukses");
+  } catch {
+    res.json({ message: err });
+  }
+});
+
+router.patch("/resetPassword", async (req, res) => {
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.newPassword, salt);
+    try {
+      const updated = await User.updateOne(
+        { email: req.body.userEmail },
+        { $set: { password: hashedPassword } }
+      );
+      return res.status(200).send("Password Changed!");
+    } catch {
+      res.json({ message: err });
+    }
+  } catch (err) {
+    res.json({ message: err });
+  }
+});
 module.exports = router;
