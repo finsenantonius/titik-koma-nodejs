@@ -226,15 +226,12 @@ router.post("/sendEmail", async (req, res) => {
   const user = await User.findOne({ email: req.body.userEmail });
   if (!user) return res.status(400).send("Email is not found!");
 
-  try {
-    transporter.sendMail(mailOptions, (err, info) => {
-      if (err) throw err;
-      console.log("Email sent: " + info.response);
-      return res.status(200).send("Sukses");
-    });
-  } catch {
-    res.json({ message: err });
-  }
+  transporter.sendMail(mailOptions, (err, info) => {
+    if (err) {
+      return console.log(err);
+    }
+    res.status(200).send({ message: "Mail send", message_id: info.messageId });
+  });
 });
 
 router.patch("/resetPassword", async (req, res) => {
