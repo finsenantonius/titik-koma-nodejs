@@ -230,8 +230,8 @@ router.post("/sendEmail", async (req, res) => {
     transporter.sendMail(mailOptions, (err, info) => {
       if (err) throw err;
       console.log("Email sent: " + info.response);
+      return res.status(200).send("Sukses");
     });
-    res.status(200).send("Sukses");
   } catch {
     res.json({ message: err });
   }
