@@ -105,7 +105,7 @@ router.patch("/changePassword", async (req, res) => {
   try {
     //ngambil data user
     const user = await User.findById(req.body.id);
-    //check password valid ga
+    //check password valid / tidak valid
     const validPassword = await bcrypt.compare(
       req.body.password,
       user.password
