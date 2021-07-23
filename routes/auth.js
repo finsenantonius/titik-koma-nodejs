@@ -8,17 +8,16 @@ const postRoute = require("../routes/post");
 const { json } = require("express");
 
 const nodemailer = require("nodemailer");
+const sendGridTransport = require("nodemailer-sendgrid-transport");
 dotenv.config();
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: "cerdaskanbangsa.id@gmail.com",
-    pass: process.env.PASSWORD,
-  },
-});
+const transporter2 = nodemailer.createTransport(
+  sendGridTransport({
+    auth: {
+      api_key: process.env.SENDGRID_API_KEY,
+    },
+  })
+);
 
 router.post("/register", async (req, res) => {
   // const {error} = schema.validate(req.body);
@@ -218,22 +217,20 @@ router.get("/getAllData", async (req, res) => {
 });
 
 router.post("/sendEmail", async (req, res) => {
-  let mailOptions = {
-    from: "Titik Koma",
-    to: req.body.userEmail,
-    subject: "Kode OTP Lupa Password",
-    text: "Kode OTP untuk merubah password adalah " + req.body.otp,
-  };
-
   const user = await User.findOne({ email: req.body.userEmail });
   if (!user) return res.status(400).send("Email is not found!");
 
-  transporter.sendMail(mailOptions, (err, info) => {
-    if (err) {
-      return console.log(err);
-    }
-    res.status(200).send({ message: "Mail send", message_id: info.messageId });
-  });
+  try {
+    transporter2.sendMail({
+      to: req.body.userEmail,
+      from: "cerdaskanbangsa.id@gmail.com",
+      subject: "Kode OTP Lupa Password",
+      text: "Kode OTP untuk merubah password adalah " + req.body.otp,
+    });
+    return res.status(200).send({ message: "Sukses" });
+  } catch {
+    res.json({ message: err });
+  }
 });
 
 router.patch("/resetPassword", async (req, res) => {
