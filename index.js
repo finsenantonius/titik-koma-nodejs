@@ -11,6 +11,8 @@ const courseRoute = require("./routes/course");
 const feedbackRoute = require("./routes/feedback");
 const challengeRoute = require("./routes/challenge");
 const newsRoute = require("./routes/news");
+const voucherRoute = require("./routes/voucher");
+const rewardRoute = require("./routes/reward");
 
 app.use(cors());
 dotenv.config();
@@ -31,6 +33,8 @@ app.use("/api/course/", courseRoute);
 app.use("/api/feedback/", feedbackRoute);
 app.use("/api/challenge/", challengeRoute);
 app.use("/api/news/", newsRoute);
+app.use("/api/voucher/", voucherRoute);
+app.use("/api/reward/", rewardRoute);
 
 const port = process.env.PORT || 3000;
 app.listen(port);
